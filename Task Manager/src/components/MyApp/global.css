@@ -1,0 +1,56 @@
+.appWrapper {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  min-height: 100vh;
+  flex-grow: 1;
+  background-image: url('../../assets/texture.jpg');
+  background-color: #f8f9fa;
+  padding-bottom: 20px;
+}
+
+.notesContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 16px;
+  width: 100vw;
+  margin: 0;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+.header {
+  background-color: #f5ba13;
+  padding: 16px 32px;
+  text-align: center;
+  width: 100%;
+  max-width: 800px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+}
+
+.createArea {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  justify-content: center;
+}
+
+.footer {
+  text-align: center;
+  margin-top: auto;
+  padding: 10px;
+  width: 100%;
+  max-width: 800px;
+  background-color: #ddd;
+}
