@@ -6,6 +6,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import Note from "./Note";
 import CreateArea from "./CreateArea";
+import LandingPage from "./LandingPage"; // Import the new LandingPage component
 import styles from "./dashboard.module.css";
 
 const PrivateRoute = ({ children }) => {
@@ -67,8 +68,8 @@ function App() {
       const result = await response.json();
       if (response.ok) {
         setNotes(result.notes || []);
-        setOriginalOrder(result.notes.map(note => note._id));
-        setPinnedNotes(new Set(result.notes.filter(note => note.pinned).map(note => note._id)));
+        setOriginalOrder(result.notes.map((note) => note._id));
+        setPinnedNotes(new Set(result.notes.filter((note) => note.pinned).map((note) => note._id)));
       } else {
         console.error("Failed to fetch notes:", result.message);
       }
@@ -187,15 +188,12 @@ function App() {
 
   return (
     <Routes>
+      <Route path="/" element={<LandingPage />} /> {/* Add the LandingPage route */}
       <Route path="/signup" element={<Signup />} />
       <Route
         path="/login"
         element={
-          !isAuthenticated ? (
-            <Login onLoginSuccess={handleLoginSuccess} />
-          ) : (
-            <Navigate to="/dashboard" replace />
-          )
+          !isAuthenticated ? <Login onLoginSuccess={handleLoginSuccess} /> : <Navigate to="/dashboard" replace />
         }
       />
       <Route
@@ -224,7 +222,7 @@ function App() {
           </PrivateRoute>
         }
       />
-      <Route path="*" element={<Navigate to="/signup" />} />
+      <Route path="*" element={<Navigate to="/" />} /> {/* Redirect unknown routes to the landing page */}
     </Routes>
   );
 }
