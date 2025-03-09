@@ -6,7 +6,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import Note from "./Note";
 import CreateArea from "./CreateArea";
-import LandingPage from "./LandingPage"; // Import the new LandingPage component
+import LandingPage from "../LandingPage/LandingPage"; // Import the new LandingPage component
 import styles from "./dashboard.module.css";
 
 const PrivateRoute = ({ children }) => {
