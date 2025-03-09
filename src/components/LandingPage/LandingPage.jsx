@@ -1,9 +1,6 @@
 import React from "react";
 import styles from "./landingpage.module.css";
 
-// Replace local Font Awesome import with CDN for consistency
-const fontAwesomeCSS = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css";
-
 const LandingPage = () => {
   return (
     <div className={styles.pageWrapper}>
