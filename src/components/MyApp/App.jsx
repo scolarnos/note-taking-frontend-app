@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import Signup from "../Signup/Signup";
 import Login from "../Login/Login";
 import Header from "./Header";
 import Footer from "./Footer";
 import Note from "./Note";
 import CreateArea from "./CreateArea";
-import LandingPage from "../LandingPage/LandingPage"; // Import the new LandingPage component
 import styles from "./dashboard.module.css";
 
 const PrivateRoute = ({ children }) => {
@@ -20,6 +19,8 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [pinnedNotes, setPinnedNotes] = useState(new Set());
   const [originalOrder, setOriginalOrder] = useState([]);
+  const [error, setError] = useState(null); // Added for error handling
+  const navigate = useNavigate(); // Added for navigation
 
   useEffect(() => {
     const userId = localStorage.getItem("userId");
@@ -47,11 +48,13 @@ function App() {
       } else {
         localStorage.removeItem("userId");
         setIsAuthenticated(false);
+        navigate("/login"); // Redirect to login on invalid user
       }
     } catch (error) {
       console.error("Error verifying user:", error);
       localStorage.removeItem("userId");
       setIsAuthenticated(false);
+      navigate("/login"); // Redirect to login on error
     }
   };
 
@@ -70,11 +73,13 @@ function App() {
         setNotes(result.notes || []);
         setOriginalOrder(result.notes.map((note) => note._id));
         setPinnedNotes(new Set(result.notes.filter((note) => note.pinned).map((note) => note._id)));
+        setError(null); // Clear any previous errors
       } else {
-        console.error("Failed to fetch notes:", result.message);
+        setError(result.message || "Failed to fetch notes.");
       }
     } catch (error) {
       console.error("Error fetching notes:", error);
+      setError("Failed to fetch notes. Please try again later.");
     }
   };
 
@@ -104,11 +109,13 @@ function App() {
       if (response.ok) {
         setNotes((prevNotes) => [...prevNotes, result.note]);
         setOriginalOrder((prevOrder) => [...prevOrder, result.note._id]);
+        setError(null); // Clear any previous errors
       } else {
-        console.error("Failed to add note:", result.message);
+        setError(result.message || "Failed to add note.");
       }
     } catch (error) {
       console.error("Error adding note:", error);
+      setError("Failed to add note. Please try again.");
     }
   };
 
@@ -134,11 +141,13 @@ function App() {
           return newSet;
         });
         setOriginalOrder((prevOrder) => prevOrder.filter((noteId) => noteId !== id));
+        setError(null); // Clear any previous errors
       } else {
-        console.error("Failed to delete note:", result.message);
+        setError(result.message || "Failed to delete note.");
       }
     } catch (error) {
       console.error("Error deleting note:", error);
+      setError("Failed to delete note. Please try again.");
     }
   };
 
@@ -167,11 +176,13 @@ function App() {
           }
           return newSet;
         });
+        setError(null); // Clear any previous errors
       } else {
-        console.error("Failed to update pin status:", result.message);
+        setError(result.message || "Failed to update pin status.");
       }
     } catch (error) {
       console.error("Error updating pin status:", error);
+      setError("Failed to update pin status. Please try again.");
     }
   };
 
@@ -188,7 +199,6 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/" element={<LandingPage />} /> {/* Add the LandingPage route */}
       <Route path="/signup" element={<Signup />} />
       <Route
         path="/login"
@@ -205,6 +215,7 @@ function App() {
               <div className={styles.createArea}>
                 <CreateArea onAdd={addNote} />
               </div>
+              {error && <div className={styles.error}>{error}</div>} {/* Display error if present */}
               <div className={styles.notesContainer}>
                 {sortedNotes.map((note) => (
                   <Note
@@ -222,7 +233,7 @@ function App() {
           </PrivateRoute>
         }
       />
-      <Route path="*" element={<Navigate to="/" />} /> {/* Redirect unknown routes to the landing page */}
+      <Route path="*" element={<Navigate to="/signup" replace />} /> {/* Updated to redirect to /signup */}
     </Routes>
   );
 }

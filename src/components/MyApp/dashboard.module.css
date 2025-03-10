@@ -141,3 +141,9 @@
   gap: 10px;
   margin-bottom: 10px;
 }
+
+.error {
+  color: red;
+  text-align: center;
+  margin: 10px 0;
+}
